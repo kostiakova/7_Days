@@ -63,5 +63,24 @@ public class Moving : MonoBehaviour
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookspeed, 0);
         }
         #endregion
+
+        #region Handles E-Button
+        if (Input.GetKey(KeyCode.E))
+        {
+            Vector3 cameraPosition = new Vector3(camera.transform.position.x, camera.transform.position.y, camera.transform.position.z);// + 0.25f
+            Ray ray = new Ray(cameraPosition, camera.transform.forward);
+            Debug.DrawRay(ray.origin, ray.direction * 4f);
+            RaycastHit hitData;
+            if (Physics.Raycast(ray, out hitData, 4f))
+            {
+                if (hitData.collider.name == "Player") { }
+                else { Debug.Log(hitData.collider.name); }
+
+            }
+
+        }
+
+
+        #endregion
     }
 }
