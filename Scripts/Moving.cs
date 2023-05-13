@@ -18,6 +18,8 @@ public class Moving : MonoBehaviour
     float rotationX = 0f;
     public bool canMove = true;
 
+    [SerializeField] GameObject Panel;
+    public bool isPaused;
     void Start()
     {
         CharContrl = GetComponent<CharacterController>();
@@ -79,7 +81,23 @@ public class Moving : MonoBehaviour
             }
 
         }
+        #endregion
 
+        #region Handles Pause
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPaused) {
+                Time.timeScale = 1f;
+                Panel.SetActive(false);
+            }
+            else
+            {
+                Panel.SetActive(true);
+                Time.timeScale = 0;
+            }
+            isPaused = !isPaused;
+        }
 
         #endregion
     }
