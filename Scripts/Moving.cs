@@ -40,7 +40,7 @@ public class Moving : MonoBehaviour
         #endregion
 
         #region Handles Jumping 
-        if(Input.GetButton("Jump") && canMove && CharContrl.isGrounded)
+        if (Input.GetButton("Jump") && canMove && CharContrl.isGrounded)
         {
             moveDirection.y = jumpPower;
         }
@@ -87,7 +87,8 @@ public class Moving : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (isPaused) {
+            if (isPaused)
+            {
                 Time.timeScale = 1f;
                 Panel.SetActive(false);
             }
