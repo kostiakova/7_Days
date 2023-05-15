@@ -9,10 +9,12 @@ public class Moving : MonoBehaviour
     [SerializeField] float jumpPower = 10f;
     const float Gravity = 10f;
     [SerializeField] float movX, movZ;
-    public CharacterController CharContrl;
+    [SerializeField] public CharacterController CharContrl;
     public new Camera camera;
     public float lookspeed = 2f;
     public float lookXLimt = 45f;
+
+    public GameObject Capsule;
 
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0f;
@@ -20,15 +22,24 @@ public class Moving : MonoBehaviour
 
     [SerializeField] GameObject Panel;
     public bool isPaused;
+
+    public GameObject Flashlight;
+    string nameOfLight;
+
+    public bool hasLIght, touchsLIght;
+
+
     void Start()
     {
         CharContrl = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        nameOfLight = Flashlight.name;
     }
 
     void Update()
     {
+        Capsule.transform.position = transform.position;
         #region Handles Movement
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
@@ -67,17 +78,19 @@ public class Moving : MonoBehaviour
         #endregion
 
         #region Handles E-Button
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             Vector3 cameraPosition = new Vector3(camera.transform.position.x, camera.transform.position.y, camera.transform.position.z);// + 0.25f
             Ray ray = new Ray(cameraPosition, camera.transform.forward);
             Debug.DrawRay(ray.origin, ray.direction * 4f);
             RaycastHit hitData;
             if (Physics.Raycast(ray, out hitData, 4f))
+            {if (!(hitData.collider.name == "Player")) { Debug.Log(hitData.collider.name); }}
+            if (touchsLIght)
             {
-                if (hitData.collider.name == "Player") { }
-                else { Debug.Log(hitData.collider.name); }
-
+                hasLIght = true;
+                PlayerPrefs.SetInt("HasLight", 1);
+                //Debug.Log("ChangedPrefs");
             }
 
         }
@@ -93,12 +106,22 @@ public class Moving : MonoBehaviour
             }
             else
             {
+                Time.timeScale = 0f;
                 Panel.SetActive(true);
-                Time.timeScale = 0;
             }
             isPaused = !isPaused;
         }
-
         #endregion
     }
+
+    #region Handles FlashLight detection
+    public void OnTriggerEnter(Collider collision)
+    {
+        if (collision.name == nameOfLight)
+        {
+            //Debug.Log("Collision!!!");
+            touchsLIght = true;
+        }
+    }
+    #endregion
 }
