@@ -14,8 +14,6 @@ public class Moving : MonoBehaviour
     public float lookspeed = 2f;
     public float lookXLimt = 45f;
 
-    public GameObject Capsule;
-
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0f;
     public bool canMove = true;
@@ -23,8 +21,9 @@ public class Moving : MonoBehaviour
     [SerializeField] GameObject Panel;
     public bool isPaused;
 
-    public GameObject Flashlight;
+    public GameObject Flashlight; // Сюда вешаем объект фонарика
     string nameOfLight;
+    public GameObject SpotLight; // сюда вешаем СпотЛайт
 
     public bool hasLIght, touchsLIght;
 
@@ -34,12 +33,13 @@ public class Moving : MonoBehaviour
         CharContrl = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        nameOfLight = Flashlight.name;
+        nameOfLight = Flashlight.name; //ну, просто берет имя, яхз
+        hasLIght = PlayerPrefs.HasKey("HasLight") ? (PlayerPrefs.GetInt("HasLight") > 0) : false; // Проверяет, есть ли ключ HasLight в Префсах, и сетает переменную hasLIght в зависимости от ответа
     }
 
     void Update()
     {
-        Capsule.transform.position = transform.position;
+
         #region Handles Movement
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
@@ -85,14 +85,22 @@ public class Moving : MonoBehaviour
             Debug.DrawRay(ray.origin, ray.direction * 4f);
             RaycastHit hitData;
             if (Physics.Raycast(ray, out hitData, 4f))
-            {if (!(hitData.collider.name == "Player")) { Debug.Log(hitData.collider.name); }}
-            if (touchsLIght)
+            {if (!(hitData.collider.name == "Player")) { Debug.Log(hitData.collider.name); }} // это чтоб в консоль не выводилось столкновение RayCast'a с игркоом
+            if (touchsLIght) // при коллизии игрока и фонарика
             {
                 hasLIght = true;
-                PlayerPrefs.SetInt("HasLight", 1);
-                //Debug.Log("ChangedPrefs");
+                PlayerPrefs.SetInt("HasLight", 1); // чтоб на других сценах можно уже было выяснить, взял игрок фонарь, или нет
+                //Debug.Log("ChangedPrefs"); //на всякий случай
             }
 
+        }
+        #endregion
+
+        #region Handles On-Off FlashLight
+
+        if (hasLIght)
+        {
+            if (Input.GetKeyDown(KeyCode.F)) { SpotLight.SetActive(!SpotLight.active); }
         }
         #endregion
 
