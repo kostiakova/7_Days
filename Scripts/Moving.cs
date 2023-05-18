@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Moving : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class Moving : MonoBehaviour
         Cursor.visible = false;
         nameOfLight = Flashlight.name; //ну, просто берет имя, яхз
         hasLIght = PlayerPrefs.HasKey("HasLight") ? (PlayerPrefs.GetInt("HasLight") > 0) : false; // Проверяет, есть ли ключ HasLight в Префсах, и сетает переменную hasLIght в зависимости от ответа
+        hasLIght = !(SceneManager.GetActiveScene().name == "SampleScene");
+        Debug.Log(hasLIght);
     }
 
     void Update()
@@ -80,17 +83,18 @@ public class Moving : MonoBehaviour
         #region Handles E-Button
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Vector3 cameraPosition = new Vector3(camera.transform.position.x, camera.transform.position.y, camera.transform.position.z);// + 0.25f
+            /*Vector3 cameraPosition = new Vector3(camera.transform.position.x, camera.transform.position.y, camera.transform.position.z);// + 0.25f
             Ray ray = new Ray(cameraPosition, camera.transform.forward);
             Debug.DrawRay(ray.origin, ray.direction * 4f);
             RaycastHit hitData;
             if (Physics.Raycast(ray, out hitData, 4f))
-            {if (!(hitData.collider.name == "Player")) { Debug.Log(hitData.collider.name); }} // это чтоб в консоль не выводилось столкновение RayCast'a с игркоом
+            {if (!(hitData.collider.name == "Player")) { Debug.Log(hitData.collider.name); }} // это чтоб в консоль не выводилось столкновение RayCast'a с игркоом */
             if (touchsLIght) // при коллизии игрока и фонарика
             {
                 hasLIght = true;
                 PlayerPrefs.SetInt("HasLight", 1); // чтоб на других сценах можно уже было выяснить, взял игрок фонарь, или нет
                 //Debug.Log("ChangedPrefs"); //на всякий случай
+                Flashlight.SetActive(false);
             }
 
         }
@@ -129,6 +133,13 @@ public class Moving : MonoBehaviour
         {
             //Debug.Log("Collision!!!");
             touchsLIght = true;
+        }
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.name == nameOfLight)
+        {
+            touchsLIght = false;
         }
     }
     #endregion
