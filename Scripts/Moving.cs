@@ -42,6 +42,14 @@ public class Moving : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            CharContrl.height = 1.2f; // Это высота на которую меняем
+        }
+        else
+        {
+            CharContrl.height = 2; // Это стандартная высота игрока
+        }
 
         #region Handles Movement
         Vector3 forward = transform.TransformDirection(Vector3.forward);
@@ -52,7 +60,7 @@ public class Moving : MonoBehaviour
         float moveDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
         #endregion
-
+        
         #region Handles Jumping 
         if(Input.GetButton("Jump") && canMove && CharContrl.isGrounded)
         {
@@ -66,7 +74,7 @@ public class Moving : MonoBehaviour
         {
             moveDirection.y -= Gravity * Time.deltaTime;
         }
-        #endregion
+        #endregion              
 
         #region Handles Rotation
         CharContrl.Move(moveDirection * Time.deltaTime);
