@@ -27,6 +27,7 @@ public class Moving : MonoBehaviour
     public GameObject SpotLight; // сюда вешаем СпотЛайт
 
     public bool hasLIght, touchsLIght;
+    public float crouching = 1.2f;
 
 
     void Start()
@@ -42,14 +43,16 @@ public class Moving : MonoBehaviour
 
     void Update()
     {
+        #region Handles Crouching
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            CharContrl.height = 1.2f; // Это высота на которую меняем
+            CharContrl.height = crouching; // Это высота на которую меняем
         }
         else
         {
             CharContrl.height = 2; // Это стандартная высота игрока
         }
+        #endregion
 
         #region Handles Movement
         Vector3 forward = transform.TransformDirection(Vector3.forward);
