@@ -38,7 +38,7 @@ public class Moving : MonoBehaviour
         nameOfLight = Flashlight.name; //ну, просто берет имя, яхз
         hasLIght = PlayerPrefs.HasKey("HasLight") ? (PlayerPrefs.GetInt("HasLight") > 0) : false; // Проверяет, есть ли ключ HasLight в Префсах, и сетает переменную hasLIght в зависимости от ответа
         hasLIght = !(SceneManager.GetActiveScene().name == "SampleScene");
-        Debug.Log(hasLIght);
+        //Debug.Log(hasLIght);
     }
 
     void Update()
@@ -47,10 +47,12 @@ public class Moving : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftControl))
         {
             CharContrl.height = crouching; // Это высота на которую меняем
+            speed = 2f;
         }
         else
         {
             CharContrl.height = 2; // Это стандартная высота игрока
+            speed = 5f;
         }
         #endregion
 
@@ -63,9 +65,9 @@ public class Moving : MonoBehaviour
         float moveDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
         #endregion
-        
+
         #region Handles Jumping 
-        if(Input.GetButton("Jump") && canMove && CharContrl.isGrounded)
+        if (Input.GetButton("Jump") && canMove && CharContrl.isGrounded)
         {
             moveDirection.y = jumpPower;
         }
@@ -123,7 +125,8 @@ public class Moving : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (isPaused) {
+            if (isPaused)
+            {
                 Time.timeScale = 1f;
                 Panel.SetActive(false);
             }
