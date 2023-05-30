@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Moving : MonoBehaviour
 {
+    [Header("Moving")]
+
     [SerializeField] float speed = 5f;
     [SerializeField] float runspeed = 10f;
     [SerializeField] float jumpPower = 10f;
@@ -19,15 +21,21 @@ public class Moving : MonoBehaviour
     float rotationX = 0f;
     public bool canMove = true;
 
+    [Header("Pause Panel")]
     [SerializeField] GameObject Panel;
     public bool isPaused;
 
+    [Header("Lighting")]
     public GameObject Flashlight; // Сюда вешаем объект фонарика
     string nameOfLight;
     public GameObject SpotLight; // сюда вешаем СпотЛайт
 
     public bool hasLIght, touchsLIght;
     public float crouching = 1.2f;
+
+    [Header("Sounds")]
+    [SerializeField] private AudioSource ShagiPoLesu;
+
 
 
     void Start()
@@ -39,6 +47,7 @@ public class Moving : MonoBehaviour
         hasLIght = PlayerPrefs.HasKey("HasLight") ? (PlayerPrefs.GetInt("HasLight") > 0) : false; // Проверяет, есть ли ключ HasLight в Префсах, и сетает переменную hasLIght в зависимости от ответа
         hasLIght = !(SceneManager.GetActiveScene().name == "SampleScene");
         //Debug.Log(hasLIght);
+        ShagiPoLesu = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -64,7 +73,14 @@ public class Moving : MonoBehaviour
         float curSpeedY = canMove ? ((Input.GetKey(KeyCode.LeftShift)) ? runspeed : speed) * Input.GetAxis("Horizontal") : 0;
         float moveDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
-        #endregion
+
+        if(canMove || Input.GetKeyDown(KeyCode.W))
+        {
+            if(!ShagiPoLesu.isPlaying)
+            {
+                ShagiPoLesu.Play();
+            }
+        }
 
         #region Handles Jumping 
         if (Input.GetButton("Jump") && canMove && CharContrl.isGrounded)
@@ -158,3 +174,4 @@ public class Moving : MonoBehaviour
     }
     #endregion
 }
+#endregion
