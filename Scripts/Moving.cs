@@ -74,7 +74,7 @@ public class Moving : MonoBehaviour
         float moveDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        if(canMove || Input.GetKeyDown(KeyCode.W))
+        if(canMove && Input.GetKeyDown(KeyCode.W))
         {
             if(!ShagiPoLesu.isPlaying)
             {
