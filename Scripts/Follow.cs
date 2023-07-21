@@ -10,8 +10,15 @@ public class Follow : MonoBehaviour
     public NavMeshAgent enemy;
     public Transform Player;
 
+    private void Start()
+    {
+        enemy = GetComponent<NavMeshAgent>();
+    }
+
     private void Update()
     {
-        enemy.SetDestination(Player.position); 
+        enemy.destination = Player.position;
+        
+
     }
 }
